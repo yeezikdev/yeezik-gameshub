@@ -1,1 +1,463 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yeezik Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0b12;
+      --surface: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f4f4f8;
+      --muted: #9a9ab0;
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Sfondo con bagliori sfumati */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 60, 172, 0.18), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(80, 120, 255, 0.18), transparent 40%),
+        radial-gradient(circle at 50% 90%, rgba(0, 220, 180, 0.12), transparent 45%);
+      z-index: -1;
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      to { transform: translate(3%, -3%) rotate(3deg); }
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 64px 20px 48px;
+    }
+
+    header { text-align: center; margin-bottom: 52px; }
+
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.4rem, 8vw, 4.5rem);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(90deg, #ff3cac, #784ba0, #2b86c5, #00dcb4);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 8s linear infinite;
+    }
+    @keyframes shine { to { background-position: 300% 0; } }
+
+    .subtitle {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      --accent: #ff3cac;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 28px 24px 24px;
+      min-height: 230px;
+      border-radius: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 0%, var(--accent), transparent 60%);
+      opacity: .18;
+      transition: opacity .25s ease;
+      pointer-events: none;
+    }
+    .card:hover, .card:focus-visible {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: 0 18px 40px -18px var(--accent);
+      outline: none;
+    }
+    .card:hover::after, .card:focus-visible::after { opacity: .35; }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+    }
+
+    .card h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .play {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .play span { transition: transform .25s ease; }
+    .card:hover .play span { transform: translateX(5px); }
+
+    /* Riquadro "prossimamente" */
+    .card.soon {
+      border-style: dashed;
+      cursor: default;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .card.soon::after { display: none; }
+    .card.soon:hover { transform: none; box-shadow: none; border-color: var(--border); }
+    .card.soon .icon { font-size: 1.6rem; color: var(--muted); }
+    .card.soon h2 { color: var(--muted); font-size: 1rem; }
+
+    footer {
+      margin-top: 56px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    /* Tasto condividi */
+    .share-btn {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      font: 700 .95rem 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .share-btn:hover { background: rgba(255, 255, 255, 0.12); border-color: #ff3cac; transform: translateY(-2px); }
+    .share-btn svg { width: 18px; height: 18px; }
+
+    /* Finestra condivisione */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 10, 0.75);
+      backdrop-filter: blur(6px);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+      z-index: 10;
+    }
+    .overlay.open { opacity: 1; pointer-events: auto; }
+
+    .modal {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      padding: 30px 24px 24px;
+      border-radius: 24px;
+      background: #15151f;
+      border: 1px solid var(--border);
+      text-align: center;
+      transform: scale(.94);
+      transition: transform .25s ease;
+    }
+    .overlay.open .modal { transform: scale(1); }
+
+    .modal h3 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+    }
+    .modal .hint { color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+
+    .close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .close:hover { background: rgba(255, 255, 255, 0.14); }
+
+    #qrcode {
+      display: inline-block;
+      padding: 14px;
+      background: #fff;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+    #qrcode img, #qrcode canvas { display: block; width: 200px; height: 200px; }
+
+    .link-row {
+      display: flex;
+      gap: 8px;
+      padding: 6px 6px 6px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      align-items: center;
+    }
+    .link-row input {
+      flex: 1;
+      min-width: 0;
+      background: none;
+      border: none;
+      color: var(--text);
+      font: .85rem 'Space Grotesk', sans-serif;
+      outline: none;
+    }
+    .copy-btn {
+      flex-shrink: 0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(90deg, #ff3cac, #784ba0);
+      color: #fff;
+      font: 700 .85rem 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      transition: filter .2s ease;
+    }
+    .copy-btn:hover { filter: brightness(1.15); }
+    .copy-btn.done { background: #00b894; }
+
+    .native-share {
+      margin-top: 12px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text);
+      font: 700 .9rem 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      display: none;
+    }
+    .native-share:hover { background: rgba(255, 255, 255, 0.06); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1 class="logo">YEEZIK GAMES</h1>
+      <p class="subtitle">Scegli un gioco e inizia la partita</p>
+      <button class="share-btn" id="openShare" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+        Condividi
+      </button>
+    </header>
+
+    <main class="grid" id="grid"></main>
+
+    <footer>© <span id="year"></span> Yeezik</footer>
+  </div>
+
+  <!-- Finestra di condivisione -->
+  <div class="overlay" id="shareOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+      <button class="close" id="closeShare" type="button" aria-label="Chiudi">✕</button>
+      <h3 id="shareTitle">Invita gli amici</h3>
+      <p class="hint">Inquadra il QR code o copia il link</p>
+      <div id="qrcode"></div>
+      <div class="link-row">
+        <input id="shareLink" type="text" readonly>
+        <button class="copy-btn" id="copyBtn" type="button">Copia</button>
+      </div>
+      <button class="native-share" id="nativeShare" type="button">Condividi con un'app…</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    /* =====================================================
+       ELENCO GIOCHI
+       Per aggiungere un nuovo gioco copia un blocco { ... }
+       e incollalo in fondo alla lista, poi cambia i campi:
+         nome        → titolo del riquadro
+         descrizione → testo breve sotto il titolo
+         icona       → un'emoji
+         link        → indirizzo del gioco
+         colore      → colore di accento (formato #RRGGBB)
+       ===================================================== */
+    const GIOCHI = [
+      {
+        nome: "Intesa Vincente",
+        descrizione: "Indovina la parola dalle definizioni dei compagni di squadra, contro il tempo.",
+        icona: "🧠",
+        link: "https://yeezikdev.github.io/intesa-vincente",
+        colore: "#ff3cac"
+      },
+      {
+        nome: "Quiplash",
+        descrizione: "Riempi i buchi con la risposta più divertente: gli altri votano la migliore.",
+        icona: "💬",
+        link: "https://yeezikdev.github.io/quiplash",
+        colore: "#2b86c5"
+      },
+      // Esempio per un nuovo gioco:
+      // {
+      //   nome: "Nuovo Gioco",
+      //   descrizione: "Descrizione breve del gioco.",
+      //   icona: "🎲",
+      //   link: "https://yeezikdev.github.io/nuovo-gioco",
+      //   colore: "#00dcb4"
+      // },
+    ];
+
+    // Mostra il riquadro "Prossimamente" in fondo (true / false)
+    const MOSTRA_PROSSIMAMENTE = true;
+
+    /* ---------- Da qui in giù non serve modificare ---------- */
+    const grid = document.getElementById("grid");
+
+    GIOCHI.forEach(g => {
+      const a = document.createElement("a");
+      a.className = "card";
+      a.href = g.link;
+      a.style.setProperty("--accent", g.colore || "#ff3cac");
+      a.innerHTML = `
+        <div class="icon">${g.icona || "🎮"}</div>
+        <h2></h2>
+        <p></p>
+        <div class="play">Gioca <span>→</span></div>
+      `;
+      a.querySelector("h2").textContent = g.nome;
+      a.querySelector("p").textContent = g.descrizione || "";
+      grid.appendChild(a);
+    });
+
+    if (MOSTRA_PROSSIMAMENTE) {
+      const soon = document.createElement("div");
+      soon.className = "card soon";
+      soon.innerHTML = `<div class="icon">＋</div><h2>Nuovi giochi in arrivo</h2>`;
+      grid.appendChild(soon);
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    /* ---------- Condivisione ---------- */
+    // Link che viene condiviso (cambialo qui se sposti la pagina)
+    const LINK_CONDIVISIONE = "https://yeezikdev.github.io/yeezik-gameshub";
+
+    const overlay = document.getElementById("shareOverlay");
+    const linkInput = document.getElementById("shareLink");
+    const copyBtn = document.getElementById("copyBtn");
+    const nativeBtn = document.getElementById("nativeShare");
+    let qrCreato = false;
+
+    linkInput.value = LINK_CONDIVISIONE;
+
+    function apriCondividi() {
+      if (!qrCreato && window.QRCode) {
+        new QRCode(document.getElementById("qrcode"), {
+          text: LINK_CONDIVISIONE,
+          width: 400,
+          height: 400,
+          colorDark: "#0b0b12",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+        qrCreato = true;
+      }
+      overlay.classList.add("open");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+
+    function chiudiCondividi() {
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    document.getElementById("openShare").addEventListener("click", apriCondividi);
+    document.getElementById("closeShare").addEventListener("click", chiudiCondividi);
+    overlay.addEventListener("click", e => { if (e.target === overlay) chiudiCondividi(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") chiudiCondividi(); });
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(LINK_CONDIVISIONE);
+      } catch {
+        linkInput.select();
+        document.execCommand("copy");
+      }
+      copyBtn.textContent = "Copiato!";
+      copyBtn.classList.add("done");
+      setTimeout(() => {
+        copyBtn.textContent = "Copia";
+        copyBtn.classList.remove("done");
+      }, 2000);
+    });
+
+    // Su telefono compare anche il pulsante per condividere su WhatsApp, Telegram, ecc.
+    if (navigator.share) {
+      nativeBtn.style.display = "block";
+      nativeBtn.addEventListener("click", () => {
+        navigator.share({
+          title: "Yeezik Games",
+          text: "Vieni a giocare con me!",
+          url: LINK_CONDIVISIONE
+        }).catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
