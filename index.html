@@ -3,36 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#000000">
   <title>Yeezik Games-Hub</title>
   <style>
     :root {
-      --bg: #f5f5f7;
-      --card: #ffffff;
-      --text: #1d1d1f;
-      --secondary: #6e6e73;
-      --line: rgba(0, 0, 0, 0.08);
-      --blue: #0071e3;
-      --shadow: 0 2px 6px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.06);
-      --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.06), 0 24px 48px rgba(0, 0, 0, 0.10);
-      --sheet: rgba(255, 255, 255, 0.92);
-      --field: #f5f5f7;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #000000;
-        --card: #1c1c1e;
-        --text: #f5f5f7;
-        --secondary: #a1a1a6;
-        --line: rgba(255, 255, 255, 0.10);
-        --blue: #2997ff;
-        --shadow: none;
-        --shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.12);
-        --sheet: rgba(28, 28, 30, 0.92);
-        --field: #2c2c2e;
-      }
+      --bg: #000;
+      --card: #101012;
+      --card-2: #18181b;
+      --text: #f5f5f7;
+      --secondary: #86868b;
+      --line: rgba(255, 255, 255, 0.08);
+      --blue: #2997ff;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,141 +24,212 @@
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
-      letter-spacing: -0.01em;
+      overflow-x: hidden;
+    }
+
+    /* Luce soffusa dietro al titolo */
+    .glow {
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      width: 900px;
+      height: 600px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(120, 90, 255, 0.28), rgba(255, 55, 95, 0.12) 40%, transparent 70%);
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .wrap {
-      max-width: 980px;
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 96px 20px 64px;
+      padding: 120px 20px 64px;
     }
 
     /* Intestazione */
-    header { text-align: center; margin-bottom: 64px; }
+    header { text-align: center; margin-bottom: 96px; }
 
-    .eyebrow {
-      font-size: 1.05rem;
-      font-weight: 600;
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      margin-bottom: 26px;
+      border-radius: 980px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
       color: var(--secondary);
-      margin-bottom: 8px;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
     }
 
     h1 {
-      font-size: clamp(2rem, 7vw, 4rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
+      font-size: clamp(2.6rem, 10vw, 6.5rem);
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      line-height: .95;
+      background: linear-gradient(180deg, #ffffff 30%, #8a8a94 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    h1 .accent {
+      background: linear-gradient(90deg, #ff375f, #bf5af2 50%, #2997ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     .subtitle {
-      margin-top: 14px;
+      margin: 26px auto 0;
+      max-width: 520px;
       font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+      line-height: 1.4;
       color: var(--secondary);
-      font-weight: 400;
     }
 
     .share-btn {
-      margin-top: 28px;
+      margin-top: 36px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 10px 20px;
+      gap: 8px;
+      padding: 13px 26px;
       border: none;
       border-radius: 980px;
-      background: var(--blue);
-      color: #fff;
+      background: #f5f5f7;
+      color: #000;
       font: inherit;
-      font-size: .95rem;
-      font-weight: 500;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: opacity .2s ease;
+      transition: transform .2s ease, background .2s ease;
     }
-    .share-btn:hover { opacity: .85; }
-    .share-btn svg { width: 16px; height: 16px; }
+    .share-btn:hover { transform: scale(1.04); background: #fff; }
+    .share-btn svg { width: 17px; height: 17px; }
 
     /* Griglia giochi */
+    .section-title {
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: 20px;
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
     }
 
     .card {
+      --accent: #2997ff;
+      --accent-2: #bf5af2;
+      position: relative;
       display: flex;
       flex-direction: column;
-      padding: 32px 28px 28px;
-      min-height: 240px;
-      border-radius: 22px;
+      border-radius: 28px;
       background: var(--card);
-      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      overflow: hidden;
       text-decoration: none;
       color: inherit;
-      transition: transform .3s cubic-bezier(.2, .8, .2, 1), box-shadow .3s ease;
+      transition: transform .4s cubic-bezier(.2, .8, .2, 1), border-color .3s ease, box-shadow .4s ease;
     }
     .card:hover, .card:focus-visible {
-      transform: scale(1.02);
-      box-shadow: var(--shadow-hover);
+      transform: translateY(-6px);
+      border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+      box-shadow: 0 30px 80px -30px var(--accent);
       outline: none;
     }
 
-    .app-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
+    /* Parte visiva in alto */
+    .art {
+      position: relative;
+      height: 190px;
       display: grid;
       place-items: center;
-      font-size: 1.75rem;
-      margin-bottom: 22px;
-      background: var(--accent);
-      background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 70%, #fff), var(--accent));
-      box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.08);
+      background:
+        radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent) 85%, transparent), transparent 60%),
+        radial-gradient(circle at 80% 90%, color-mix(in srgb, var(--accent-2) 75%, transparent), transparent 60%),
+        #0a0a0c;
+      overflow: hidden;
+    }
+    .art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, var(--card));
+    }
+    .art svg {
+      position: relative;
+      z-index: 1;
+      width: 76px;
+      height: 76px;
+      color: #fff;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+      transition: transform .5s cubic-bezier(.2, .8, .2, 1);
+    }
+    .card:hover .art svg { transform: scale(1.12) rotate(-4deg); }
+
+    .body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 8px 28px 28px;
     }
 
     .card h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
     }
 
     .card p {
       color: var(--secondary);
       font-size: 1rem;
-      line-height: 1.45;
+      line-height: 1.5;
       flex: 1;
     }
 
     .play {
-      margin-top: 22px;
-      color: var(--blue);
-      font-size: 1rem;
-      font-weight: 500;
+      margin-top: 24px;
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 980px;
+      background: var(--card-2);
+      border: 1px solid var(--line);
+      font-size: .95rem;
+      font-weight: 600;
+      transition: background .3s ease, color .3s ease;
     }
-    .play::after { content: " ›"; }
-    .card:hover .play { text-decoration: underline; }
+    .card:hover .play { background: #f5f5f7; color: #000; }
 
     /* Riquadro "prossimamente" */
     .card.soon {
+      min-height: 360px;
+      border-style: dashed;
       background: transparent;
-      box-shadow: none;
-      border: 1.5px dashed var(--line);
       align-items: center;
       justify-content: center;
       text-align: center;
       cursor: default;
     }
-    .card.soon:hover { transform: none; }
-    .card.soon .plus {
-      font-size: 2rem;
-      font-weight: 200;
-      color: var(--secondary);
-      margin-bottom: 8px;
-    }
-    .card.soon h2 { font-size: 1.05rem; font-weight: 500; color: var(--secondary); margin: 0; }
+    .card.soon:hover { transform: none; box-shadow: none; border-color: var(--line); }
+    .card.soon svg { width: 40px; height: 40px; color: var(--secondary); margin-bottom: 14px; }
+    .card.soon h2 { font-size: 1.15rem; font-weight: 600; color: var(--secondary); margin: 0; }
 
     footer {
-      margin-top: 80px;
-      padding-top: 20px;
+      margin-top: 96px;
+      padding-top: 24px;
       border-top: 1px solid var(--line);
       text-align: center;
       color: var(--secondary);
@@ -188,7 +240,9 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.6);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
       display: grid;
       place-items: center;
       padding: 16px;
@@ -202,52 +256,54 @@
     .sheet {
       position: relative;
       width: 100%;
-      max-width: 340px;
-      padding: 32px 24px 24px;
-      border-radius: 22px;
-      background: var(--sheet);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      backdrop-filter: saturate(180%) blur(20px);
-      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+      max-width: 360px;
+      padding: 36px 24px 24px;
+      border-radius: 28px;
+      background: rgba(24, 24, 27, 0.92);
+      border: 1px solid var(--line);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      backdrop-filter: saturate(180%) blur(24px);
       text-align: center;
       transform: scale(.96);
       transition: transform .3s cubic-bezier(.2, .8, .2, 1);
     }
     .overlay.open .sheet { transform: scale(1); }
 
-    .sheet h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 4px; }
-    .sheet .hint { color: var(--secondary); font-size: .9rem; margin-bottom: 22px; }
+    .sheet h3 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .sheet .hint { color: var(--secondary); font-size: .92rem; margin-bottom: 24px; }
 
     .close {
       position: absolute;
       top: 14px;
       right: 14px;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       border: none;
-      background: var(--field);
+      background: rgba(255, 255, 255, 0.08);
       color: var(--secondary);
       font-size: .95rem;
       cursor: pointer;
     }
+    .close:hover { background: rgba(255, 255, 255, 0.14); color: var(--text); }
 
     #qrcode {
       display: inline-block;
-      padding: 12px;
+      padding: 14px;
       background: #fff;
-      border-radius: 14px;
-      margin-bottom: 22px;
+      border-radius: 18px;
+      margin-bottom: 24px;
     }
-    #qrcode img, #qrcode canvas { display: block; width: 180px; height: 180px; }
+    #qrcode img, #qrcode canvas { display: block; width: 190px; height: 190px; }
 
     .link-row {
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 6px 6px 6px 14px;
-      border-radius: 12px;
-      background: var(--field);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
     }
     .link-row input {
       flex: 1;
@@ -261,32 +317,39 @@
     }
     .copy-btn {
       flex-shrink: 0;
-      padding: 8px 14px;
+      padding: 9px 16px;
       border: none;
-      border-radius: 9px;
-      background: var(--blue);
-      color: #fff;
+      border-radius: 10px;
+      background: #f5f5f7;
+      color: #000;
       font: inherit;
       font-size: .85rem;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       transition: background .2s ease;
     }
-    .copy-btn.done { background: #34c759; }
+    .copy-btn.done { background: #30d158; }
 
     .native-share {
       display: none;
       width: 100%;
       margin-top: 10px;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      background: var(--field);
-      color: var(--blue);
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: none;
+      color: var(--text);
       font: inherit;
       font-size: .95rem;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
+    }
+    .native-share:hover { background: rgba(255, 255, 255, 0.06); }
+
+    @media (max-width: 600px) {
+      .wrap { padding-top: 88px; }
+      header { margin-bottom: 64px; }
+      .art { height: 160px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -295,16 +358,20 @@
   </style>
 </head>
 <body>
+  <div class="glow"></div>
+
   <div class="wrap">
     <header>
-      <h1>YEEZIK GAMES-HUB</h1>
-      <p class="subtitle">Scegli un gioco. Inizia la partita.</p>
+      <span class="badge">Party games</span>
+      <h1>YEEZIK<br><span class="accent">GAMES-HUB</span></h1>
+      <p class="subtitle">Tutti i giochi in un unico posto. Scegli, invita gli amici e inizia la partita.</p>
       <button class="share-btn" id="openShare" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         Condividi
       </button>
     </header>
 
+    <p class="section-title">I giochi</p>
     <main class="grid" id="grid"></main>
 
     <footer>© <span id="year"></span> Yeezik</footer>
@@ -333,32 +400,37 @@
        e incollalo in fondo alla lista, poi cambia i campi:
          nome        → titolo del riquadro
          descrizione → testo breve sotto il titolo
-         icona       → un'emoji
+         icona       → una tra: "timer", "chat", "dado", "controller",
+                       "carte", "trofeo", "lampadina", "microfono", "domanda"
          link        → indirizzo del gioco
-         colore      → colore dell'icona (formato #RRGGBB)
+         colore      → colore principale (formato #RRGGBB)
+         colore2     → secondo colore della sfumatura
        ===================================================== */
     const GIOCHI = [
       {
         nome: "Intesa Vincente",
         descrizione: "Indovina la parola dalle definizioni dei compagni di squadra, contro il tempo.",
-        icona: "🧠",
+        icona: "timer",
         link: "https://yeezikdev.github.io/intesa-vincente",
-        colore: "#ff375f"
+        colore: "#ff375f",
+        colore2: "#ff9f0a"
       },
       {
         nome: "Quiplash",
         descrizione: "Riempi i buchi con la risposta più divertente. Gli altri votano la migliore.",
-        icona: "💬",
+        icona: "chat",
         link: "https://yeezikdev.github.io/quiplash",
-        colore: "#0a84ff"
+        colore: "#2997ff",
+        colore2: "#bf5af2"
       },
       // Esempio per un nuovo gioco:
       // {
       //   nome: "Nuovo Gioco",
       //   descrizione: "Descrizione breve del gioco.",
-      //   icona: "🎲",
+      //   icona: "dado",
       //   link: "https://yeezikdev.github.io/nuovo-gioco",
-      //   colore: "#30d158"
+      //   colore: "#30d158",
+      //   colore2: "#64d2ff"
       // },
     ];
 
@@ -369,20 +441,40 @@
     const LINK_CONDIVISIONE = "https://yeezikdev.github.io/yeezik-gameshub";
 
     /* ---------- Da qui in giù non serve modificare ---------- */
+    const ICONE = {
+      timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9.5 2h5"/><path d="M12 2v3"/>',
+      chat: '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/><line x1="8" y1="11.5" x2="8.01" y2="11.5"/><line x1="12" y1="11.5" x2="12.01" y2="11.5"/><line x1="16" y1="11.5" x2="16.01" y2="11.5"/>',
+      dado: '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.1" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.1" fill="currentColor"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/>',
+      controller: '<path d="M6 11h4M8 9v4"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6L2 15.4A3 3 0 0 0 7.2 18l1.6-2h6.4l1.6 2a3 3 0 0 0 5.2-2.6l-.7-6.8a4 4 0 0 0-4-3.6z"/>',
+      carte: '<rect x="2" y="6" width="12" height="16" rx="2" transform="rotate(-8 8 14)"/><rect x="10" y="3" width="12" height="16" rx="2" transform="rotate(8 16 11)"/>',
+      trofeo: '<path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
+      lampadina: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+      microfono: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/>',
+      domanda: '<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>'
+    };
+
+    function svgIcona(nome) {
+      return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONE[nome] || ICONE.controller}</svg>`;
+    }
+
     const grid = document.getElementById("grid");
 
     GIOCHI.forEach(g => {
       const a = document.createElement("a");
       a.className = "card";
       a.href = g.link;
-      a.style.setProperty("--accent", g.colore || "#0a84ff");
+      a.style.setProperty("--accent", g.colore || "#2997ff");
+      a.style.setProperty("--accent-2", g.colore2 || g.colore || "#bf5af2");
       a.innerHTML = `
-        <div class="app-icon"></div>
-        <h2></h2>
-        <p></p>
-        <span class="play">Gioca</span>
+        <div class="art">${svgIcona(g.icona)}</div>
+        <div class="body">
+          <h2></h2>
+          <p></p>
+          <span class="play">Gioca ora
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
       `;
-      a.querySelector(".app-icon").textContent = g.icona || "🎮";
       a.querySelector("h2").textContent = g.nome;
       a.querySelector("p").textContent = g.descrizione || "";
       grid.appendChild(a);
@@ -391,7 +483,7 @@
     if (MOSTRA_PROSSIMAMENTE) {
       const soon = document.createElement("div");
       soon.className = "card soon";
-      soon.innerHTML = `<div class="plus">+</div><h2>Nuovi giochi in arrivo</h2>`;
+      soon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><h2>Nuovi giochi in arrivo</h2>`;
       grid.appendChild(soon);
     }
 
@@ -410,9 +502,9 @@
       if (!qrCreato && window.QRCode) {
         new QRCode(document.getElementById("qrcode"), {
           text: LINK_CONDIVISIONE,
-          width: 360,
-          height: 360,
-          colorDark: "#1d1d1f",
+          width: 380,
+          height: 380,
+          colorDark: "#000000",
           colorLight: "#ffffff",
           correctLevel: QRCode.CorrectLevel.M
         });
